@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="edu.iec.oa.domain">
+    <class name="User" table="t_user">
+        <id name="id">
+            <generator class="native"></generator>
+        </id>
+        <property name="name"/>
+        <property name="loginName"/>
+        <property name="password"/>
+        <property name="gender"/>
+        <property name="nation"/>
+        <property name="jobTitle"/>
+        <property name="birthday"/>
+        <property name="phoneNumber"/>
+        <property name="email"/>
+        <property name="QQ"/>
+        <property name="address"/>
+        <property name="description"/>
+        <property name="status"/>
+        
+        <!-- department属性，本类（User）与Department的多对一 -->
+        <many-to-one name="department" class="Department" column="departmentId" lazy="false"></many-to-one>
+        
+        <!-- roles属性，本类（User）与Role的多对多 -->
+        <set name="roles" table="t_user_role" lazy="false">
+        	<key column="userId"></key>
+        	<many-to-many class="Role" column="roleId"></many-to-many>
+        </set>
+        <!-- notices属性，本类与Notice的一对多关系 -->
+        <set name="notices">
+        	<key column="publishUserId"></key>
+        	<one-to-many class="Notice"/>
+        </set>
+        
+        <!-- personalAddrBooks属性，本类与PersonalAddrBooks的一对多关系 -->
+        <set name="personalAddrBooks">
+        	<key column="userId"></key>
+        	<one-to-many class="PersonalAddrBook"/>
+        </set>
+        
+        <!-- archives属性，本类（User）与Archives的一对 -->
+        <set name="archives">
+        	<key column="userId"></key>
+        	<one-to-many class="Archives"/>
+        </set>
+        
+        <!-- positions属性，本类（User）与Position的一对多-->
+        <set name="positions">
+        	<key column="userId"></key>
+        	<one-to-many class="Position"/>
+        </set>
+        
+        
+	</class>
+</hibernate-mapping>

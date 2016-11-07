@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="请假申请" xmlns="http://jbpm.org/4.4/jpdl">
+   <start g="225,32,48,48" name="start1">
+      <transition g="-52,-22" name="to task1" to="task1"/>
+   </start>
+   <end g="213,316,48,48" name="end1"/>
+   <task g="203,131,89,52" name="task1"/>
+   <task g="199,223,92,52" name="task2">
+      <transition g="-52,-22" name="to task1" to="task1"/>
+      <transition g="-50,-22" name="to end1" to="end1"/>
+   </task>
+</process>

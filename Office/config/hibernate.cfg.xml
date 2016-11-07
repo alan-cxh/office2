@@ -1,0 +1,61 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+<session-factory>
+
+	<!-- 数据连接信息
+		<property name="hibernate.connection.url">jdbc:mysql:///dateBase</property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">root</property>
+	-->
+	
+	<property name="hibernate.dialect">
+		org.hibernate.dialect.MySQL5InnoDBDialect
+	</property>
+
+	<!-- 其他配置信息 -->
+	<property name="show_sql">true</property>
+	<property name="hbm2ddl.auto">update</property>
+
+
+	<!-- 这些映射文件是JBPM的，不能删除！！！ -->
+	<mapping resource="jbpm.repository.hbm.xml" />
+	<mapping resource="jbpm.execution.hbm.xml" />
+	<mapping resource="jbpm.history.hbm.xml" />
+	<mapping resource="jbpm.task.hbm.xml" />
+	<mapping resource="jbpm.identity.hbm.xml" />
+
+
+	<!-- 声明映射文件 -->
+	<!-- 实体的映射配置文件 -->
+	<mapping resource="edu/iec/oa/domain/Role.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/Department.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/User.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/Privilege.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/Notice.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/Forum.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/Reply.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/Topic.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/PersonalAddrBook.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/PublicAddrBook.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/Archives.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/Position.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/Train.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/AwardAndPunishment.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/PersonaBargain.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/PersonalNote.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/PublicNote.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/Template.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/Application.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/ApproveInfo.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/ZD_bargainType.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/ZD_nation.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/ZD_sex.hbm.xml" />
+	<mapping resource="edu/iec/oa/domain/ZD_jobTitle.hbm.xml" />
+
+
+</session-factory>
+</hibernate-configuration>

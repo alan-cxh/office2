@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="edu.iec.oa.domain">
+    <class name="PublicAddrBook" table="t_publicAddrBook">
+        <id name="id">
+            <generator class="native"></generator>
+        </id>
+        <property name="name"/>
+        <property name="gender"/>
+        <property name="phone"/>
+        <property name="mobilePhone"/>
+        <property name="QQ"/>
+        <property name="email"/>
+        <property name="deparment"/>
+        <property name="role"/>
+        <property name="postCode"/>
+        <property name="hobby"/>
+        <property name="birthday"/>
+        <property name="address"/>
+        <property name="description"/>
+        <property name="user"/>
+        <property name="ipAddress"/>
+
+	</class>
+</hibernate-mapping>

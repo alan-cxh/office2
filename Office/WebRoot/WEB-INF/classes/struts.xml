@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+	<constant name="struts.action.extension" value="action"></constant><!-- 配置为把扩展名设为action -->
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" /><!-- 动态方法调用 -->
+    <constant name="struts.devMode" value="true" /><!-- 配置为开发模式 -->
+    <constant name="struts.ui.theme" value="simple"/><!-- 将主题配置为simple -->
+	<constant name="struts.i18n.encoding" value="UTF-8" /><!--解决乱码    -->
+	<constant name="struts.multipart.maxSize" value="104857600"/><!-- Struts上传文件的大小控制 -->
+
+    <package name="default" namespace="/" extends="struts-default">
+    	<interceptors>
+    		<!-- 自己声明有一个拦截器 权限拦截器 -->
+    		<interceptor name="checkPrivilege" class="edu.iec.oa.util.CheckPrivilegeIntercepter"></interceptor>
+    		<!-- 重新定义默认的拦截器栈 。先引用了自己生命的权限拦截器，再引用了默认的拦截器栈 -->
+    		<interceptor-stack name="defaultStack">
+    			<interceptor-ref name="checkPrivilege"></interceptor-ref>
+    			<interceptor-ref name="defaultStack"></interceptor-ref>
+    		</interceptor-stack>
+    	</interceptors>
+    	
+    	<!-- 全局result配置 -->
+    	<global-results>
+    		<result name="loginUI">/WEB-INF/jsp/userAction/loginUI.jsp</result>
+    		<result name="noPrivilegeError">/noPrivilegeError.jsp</result>
+    	</global-results>
+    	
+    	<!-- 首页 -->
+    	<action name="home_*" class="homeAction" method="{1}">
+    		<result name="{1}">/WEB-INF/jsp/homeAction/{1}.jsp</result>
+    	</action>
+    
+    	<!-- struts2与spring整合成功后class属性可以写bean对象，因为bean对象就对应了一个具体类   -->
+    	<action name="test" class="testAction">
+    		<result name="success">/test.jsp</result>
+    	</action>
+    	
+    	<!-- 角色管理 -->
+    	<action name="role_*" class="roleAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/roleAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/roleAction/saveUI.jsp</result>
+    		<result name="setPrivilegeUI">/WEB-INF/jsp/roleAction/setPrivilegeUI.jsp</result>
+    		<result name="toList" type="redirectAction">role_list</result>
+    	</action>
+    	
+    	<!-- 部门管理 -->
+    	<action name="department_*" class="departmentAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/departmentAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/departmentAction/saveUI.jsp</result>
+    		<!-- 带上上级参数后，添加、修改、删除后就跳到当前页面，默认跳到顶级部门 -->
+    		<result name="toList" type="redirectAction">department_list?parentId=${parentId}</result>
+    	</action>
+    	
+    	<!-- 用户管理 -->
+    	<action name="user_*" class="userAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/userAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/userAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">user_list</result>
+    		<result name="logout">/WEB-INF/jsp/userAction/logout.jsp</result>
+    		<result name="toIndex" type="redirect">/index.jsp</result>
+    		<result name="seeMyInfo">/WEB-INF/jsp/userAction/seeMyInfo.jsp</result>
+    		<result name="updateMyPWDUI">/WEB-INF/jsp/userAction/updateMyPWDUI.jsp</result>
+    		<result name="updateMyInfoUI">/WEB-INF/jsp/userAction/updateMyInfoUI.jsp</result>
+    		<result name="toSeeMyInfo" type="redirectAction">user_seeMyInfo</result>
+    	</action>
+    	
+    	<!-- 公告管理 -->
+    	<action name="notice_*" class="noticeAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/noticeAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/noticeAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">notice_list</result>
+    		<result name="noticeUI">/WEB-INF/jsp/noticeAction/noticeUI.jsp</result>
+    		<result name="detailInfoUI">/WEB-INF/jsp/noticeAction/detailInfoUI.jsp</result>
+    	</action>
+    	
+    	<!-- 论坛:版块管理 -->
+    	<action name="forumManage_*" class="forumManageAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/forumManageAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/forumManageAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">forumManage_list</result>
+    	</action>
+    	
+    	    	
+    	<!-- 论坛:版块相关功能 -->
+    	<action name="forum_*" class="forumAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/forumAction/list.jsp</result>
+    		<result name="show">/WEB-INF/jsp/forumAction/show.jsp</result>
+    	</action>
+    	
+    	<!-- 论坛:主题相关功能 -->
+    	<action name="topic_*" class="topicAction" method="{1}">
+    		<result name="show">/WEB-INF/jsp/topicAction/show.jsp</result>
+    		<result name="addUI">/WEB-INF/jsp/topicAction/addUI.jsp</result>
+    		<result name="toShow" type="redirectAction">topic_show?id=${id}</result>
+    		<result name="toForumShow" type="redirectAction">forum_show?id=${#forum.id}</result><!-- 删除主贴后，返回到主贴所属的模块中 -->
+    	</action>
+    	
+    	<!-- 论坛:回复相关功能 -->
+    	<action name="reply_*" class="replyAction" method="{1}">
+    		<result name="addUI">/WEB-INF/jsp/replyAction/addUI.jsp</result>
+    		<result name="toTopicShow" type="redirectAction">topic_show?id=${topicId}</result>
+    		<result name="toAfterDeleteTopicShow" type="redirectAction">topic_show?id=${#topic.id}</result><!-- 删除回复后，返回到回复所属的主贴中 -->
+    	</action>
+    	
+    	<!-- 通讯录:通讯类型列表-->
+    	<action name="addressBook_list" class="addressBookAction" method="list">
+    		<result name="list">/WEB-INF/jsp/addressBookAction/list.jsp</result>
+    	</action>
+    	
+    	<!-- 通讯录:OA内部通讯类型列表-->
+    	<action name="oaAddrBook_*" class="oAAddrBookAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/addressBookAction/oaAddrBookAction/list.jsp</result>
+    		<result name="detailInfoUI">/WEB-INF/jsp/addressBookAction/oaAddrBookAction/detailInfoUI.jsp</result>
+    	</action>
+    	
+    	<!-- 通讯录：个人通讯录管理 -->
+    	<action name="personalAddrBook_*" class="personalAddrBookAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/addressBookAction/personalAddrBookAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/addressBookAction/personalAddrBookAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">personalAddrBook_list</result>
+    		<result name="detailInfoUI">/WEB-INF/jsp/addressBookAction/personalAddrBookAction/detailInfoUI.jsp</result>
+    	</action>
+    	
+    	<!-- 通讯录：公共通讯录管理 -->
+    	<action name="publicAddrBook_*" class="publicAddrBookAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/addressBookAction/publicAddrBookAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/addressBookAction/publicAddrBookAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">publicAddrBook_list</result>
+    		<result name="detailInfoUI">/WEB-INF/jsp/addressBookAction/publicAddrBookAction/detailInfoUI.jsp</result>
+    	</action>
+    	
+    	<!-- 人力资源管理：档案管理 -->
+    	<action name="archives_*" class="archivesAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/HR/archivesAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/HR/archivesAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">archives_list</result>
+    		<result name="notFondFile">/WEB-INF/jsp/HR/archivesAction/notFondFile.jsp</result>
+    		<result name="showOnline">/WEB-INF/jsp/HR/archivesAction/showOnline.jsp</result>
+    		<result name="editOnline">/WEB-INF/jsp/HR/archivesAction/editOnline.jsp</result>
+    		<!-- 相关附件下载 -->
+    		<!-- 下载用的用result是stream类型 -->
+    		<result name="download" type="stream">
+    			<param name="inputName">inputStream</param>
+    			<param name="contentType">application/octet-stream</param>
+    			<param name="contentDisposition">attachment;filename="${#fileName}"</param>
+    		</result>
+    	</action>
+    	<!-- 人力资源管理：职位更变 -->
+    	<action name="position_*" class="positionAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/HR/positionAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/HR/positionAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">position_list</result>
+    	</action>
+    	
+    	<!-- 人力资源管理：职位变更记录管理 -->
+    	<action name="positionManage_*" class="positionManageAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/HR/positionManageAction/list.jsp</result>
+    		<result name="toList" type="redirectAction">positionManage_list</result>
+    		<result name="showDetailUI">/WEB-INF/jsp/HR/positionManageAction/detailInfoUI.jsp</result>
+    	</action>
+    	
+    	<!-- 人力资源管理：培训记录 -->
+    	<action name="train_*" class="trainAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/HR/trainAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/HR/trainAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">train_list</result>
+    		<result name="detailInfoUI">/WEB-INF/jsp/HR/trainAction/detailInfoUI.jsp</result>
+    	</action>
+    	
+    	<!-- 人力资源管理：奖惩记录 -->
+    	<action name="awardAndPunishment_*" class="awardAndPunishmentAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/HR/awardAndPunishmentAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/HR/awardAndPunishmentAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">awardAndPunishment_list</result>
+    		<result name="showdetailUI">/WEB-INF/jsp/HR/awardAndPunishmentAction/detailInfoUI.jsp</result>
+    		<result name="showOnline">/WEB-INF/jsp/HR/awardAndPunishmentAction/showOnline.jsp</result>
+    		<result name="editOnline">/WEB-INF/jsp/HR/awardAndPunishmentAction/editOnline.jsp</result>
+    		<!-- 下载用的用result是stream类型 -->
+    		<result name="download" type="stream">
+    			<param name="inputName">inputStream</param>
+    			<param name="contentType">application/octet-stream</param>
+    			<param name="contentDisposition">attachment;filename="${#fileName}"</param>
+    		</result>
+    		<result name="notFondFile">/WEB-INF/jsp/HR/awardAndPunishmentAction/notFondFile.jsp</result>
+    	</action>
+    	
+    	<!-- 人力资源管理：人事合同 -->
+    	<action name="personBargain_*" class="personBargainAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/HR/personBargainAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/HR/personBargainAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">personBargain_list</result>
+    		<result name="showdetailUI">/WEB-INF/jsp/HR/personBargainAction/detailInfoUI.jsp</result>
+    		<result name="showOnline">/WEB-INF/jsp/HR/personBargainAction/showOnline.jsp</result>
+    		<result name="editOnline">/WEB-INF/jsp/HR/personBargainAction/editOnline.jsp</result>
+    		<!-- 下载用的用result是stream类型 -->
+    		<result name="download" type="stream">
+    			<param name="inputName">inputStream</param>
+    			<param name="contentType">application/octet-stream</param>
+    			<param name="contentDisposition">attachment;filename="${#fileName}"</param>
+    		</result>
+    		<result name="notFondFile">/WEB-INF/jsp/HR/personBargainAction/notFondFile.jsp</result>
+    	</action>
+    	
+    	<!-- 工作日志:工作日志类型列表-->
+    	<action name="workNote_list" class="workNoteAction" method="list">
+    		<result name="list">/WEB-INF/jsp/workNoteAction/list.jsp</result>
+    	</action>
+    	
+    	<!-- 工作日志:个人工作日志 -->
+    	<action name="personalNote_*" class="personalNoteAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/workNoteAction/personalNoteAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/workNoteAction/personalNoteAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">personalNote_list</result>
+    		<result name="showDetailUI">/WEB-INF/jsp/workNoteAction/personalNoteAction/detailInfoUI.jsp</result>
+    	</action>
+    	
+    	<!-- 工作日志:公开工作日志日志 -->
+    	<action name="publicNote_*" class="publicNoteAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/workNoteAction/publicNoteAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/workNoteAction/publicNoteAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">publicNote_list</result>
+    		<result name="readNoteUI">/WEB-INF/jsp/workNoteAction/publicNoteAction/readNoteUI.jsp</result>
+    		<result name="toReadNoteUI" type="redirectAction">publicNote_readNoteUI?id=${noteId}</result>
+    		
+    		<result name="myNoteList">/WEB-INF/jsp/workNoteAction/publicNoteAction/myNoteList.jsp</result>
+    		<result name="toMyNoteList" type="redirectAction">publicNote_myNoteList</result>
+    		<result name="readMyNoteUI">/WEB-INF/jsp/workNoteAction/publicNoteAction/readMyNoteUI.jsp</result>
+    	</action>
+    	
+    	<!-- 流程定义管理(部署，删除) -->
+    	<action name="processDefinition_*" class="processDefinitionAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/processDefinitionAction/list.jsp</result>
+    		<result name="addUI">/WEB-INF/jsp/processDefinitionAction/addUI.jsp</result>
+    		<result name="toList" type="redirectAction">processDefinition_list</result>
+    		<!-- 下载用的用result是stream类型 -->
+    		<result name="showProcessImage" type="stream">
+    			<param name="inputName">inputStream</param>
+    		</result>
+    	</action>
+    	
+    	<!-- 申请模板管理 -->
+    	<action name="template_*" class="templateAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/templateAction/list.jsp</result>
+    		<result name="toList" type="redirectAction">template_list</result>
+    		<result name="saveUI">/WEB-INF/jsp/templateAction/saveUI.jsp</result>
+    		<result name="showOnline">/WEB-INF/jsp/templateAction/showOnline.jsp</result>
+    		<result name="editOnline">/WEB-INF/jsp/templateAction/editOnline.jsp</result>
+    		<!-- 下载用的用result是stream类型 -->
+    		<result name="download" type="stream">
+    			<param name="inputName">inputStream</param>
+    			<param name="contentType">application/octet-stream</param>
+    			<param name="contentDisposition">attachment;filename="${#fileName}.doc"</param>
+    		</result>
+    		<result name="notFondFile">/WEB-INF/jsp/templateAction/notFondFile.jsp</result>
+    	</action>
+    	
+    	<!-- 审批流转 -->
+    	<action name="flow_*" class="flowAction" method="{1}">
+    		<result name="templateList">/WEB-INF/jsp/flowAction/templateList.jsp</result>
+    		<result name="submitUI">/WEB-INF/jsp/flowAction/submitUI.jsp</result>
+    		<result name="myApplicationList">/WEB-INF/jsp/flowAction/myApplicationList.jsp</result>
+    		<result name="toMyApplicationList" type="redirectAction">flow_myApplicationList</result>
+
+    		<result name="myTaskList">/WEB-INF/jsp/flowAction/myTaskList.jsp</result>
+    		<result name="approveUI">/WEB-INF/jsp/flowAction/approveUI.jsp</result>
+    		<result name="approvedHistory">/WEB-INF/jsp/flowAction/approvedHistory.jsp</result>
+    		<result name="toMyTaskList" type="redirectAction">flow_myTaskList</result>
+    		
+    		<result name="applicationInfo">/WEB-INF/jsp/flowAction/applicationInfo.jsp</result>
+    	</action>
+    	
+    	<!-- 申请记录管理 -->
+    	<action name="application_*" class="applicationAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/applicationAction/list.jsp</result>
+    		<result name="toList" type="redirectAction">application_list</result>
+    		<result name="showOnline">/WEB-INF/jsp/applicationAction/showOnline.jsp</result>
+    		<!-- 下载用的用result是stream类型 -->
+    		<result name="download" type="stream">
+    			<param name="inputName">inputStream</param>
+    			<param name="contentType">application/octet-stream</param>
+    			<param name="contentDisposition">attachment;filename="${#fileName}.doc"</param>
+    		</result>
+    	</action>
+    	
+    	<!-- 字典管理：性别 -->
+    	<action name="ZDsex_*" class="ZD_sexAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/ZD/sexAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/ZD/sexAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">ZDsex_list</result>
+    	</action>
+    	
+    	<!-- 字典管理：民族 -->
+    	<action name="ZDnation_*" class="ZD_nationAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/ZD/nationAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/ZD/nationAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">ZDnation_list</result>
+    	</action>
+    	
+    	<!-- 字典管理：合同类型 -->
+    	<action name="ZDbargainType_*" class="ZD_bargainTypeAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/ZD/bargainTypeAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/ZD/bargainTypeAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">ZDbargainType_list</result>
+    	</action>
+    	
+    	<!-- 字典管理：职称 -->
+    	<action name="ZDjobTitle_*" class="ZD_jobTitleAction" method="{1}">
+    		<result name="list">/WEB-INF/jsp/ZD/jobTitleAction/list.jsp</result>
+    		<result name="saveUI">/WEB-INF/jsp/ZD/jobTitleAction/saveUI.jsp</result>
+    		<result name="toList" type="redirectAction">ZDjobTitle_list</result>
+    	</action>
+    	
+    	
+    	<!-- 数据统计：师资力量 -->
+    	<action name="teacherResource_*" class="DC_TeacherResourceAction" method="{1}">
+    		<result name="show">/WEB-INF/jsp/DC/DC_teacherResource/show.jsp</result>
+    		<result name="nation">/WEB-INF/jsp/DC/DC_teacherResource/nation.jsp</result>
+    		<result name="jobTitle">/WEB-INF/jsp/DC/DC_teacherResource/jobTitle.jsp</result>
+    		<result name="gender">/WEB-INF/jsp/DC/DC_teacherResource/gender.jsp</result>
+    		<result name="departGender">/WEB-INF/jsp/DC/DC_teacherResource/departGender.jsp</result>
+    		<result name="departJobTitle">/WEB-INF/jsp/DC/DC_teacherResource/departJobTitle.jsp</result>
+    		<result name="jobTitleGender">/WEB-INF/jsp/DC/DC_teacherResource/jobTitleGender.jsp</result>
+    	</action>
+    	
+    	<!-- 数据统计：人数数据统计 -->
+    	<action name="humanResource_*" class="DC_HumanResourceAction" method="{1}">
+    		<result name="show">/WEB-INF/jsp/DC/DC_humanResource/show.jsp</result>
+    		<result name="departAwardAndPunishment">/WEB-INF/jsp/DC/DC_humanResource/departAwardAndPunishment.jsp</result>
+    	</action>
+    	
+    </package>
+</struts>

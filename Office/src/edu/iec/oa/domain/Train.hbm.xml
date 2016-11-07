@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="edu.iec.oa.domain">
+    <class name="Train" table="t_train">
+        <id name="id">
+            <generator class="native"></generator>
+        </id>
+        <property name="userId"/>
+        <property name="userName"/>
+        
+        <!-- 培训基本信息 -->
+        <property name="startTime"/>
+        <property name="content"/>
+        <property name="department"/>
+        <property name="address"/>
+        <property name="endTime"/>
+        <property name="result"/>
+        
+        <property name="operator"/>
+        <property name="operatTime"/>
+        <property name="ipAddress"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="edu.iec.oa.domain">
+    <class name="PersonBargain" table="t_personBargain">
+        <id name="id">
+            <generator class="native"></generator>
+        </id>
+        <property name="userId"/>
+        <property name="userName"/>
+        
+        <!-- 人事合同基本信息 -->
+        <property name="title"/>
+        <property name="type"/>
+        <property name="description"/>
+        
+        <!-- 附件信息 -->
+        <property name="bargainFileName"/>
+        <property name="bargainContentType"/>
+        <property name="bargainSavePath"/>
+        
+        <!-- 操作日志信息 -->
+        <property name="operator"/>
+        <property name="operatTime"/>
+        <property name="ipAddress"/>
+        
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="edu.iec.oa.domain">
+    <class name="Notice" table="t_notice">
+        <id name="id">
+            <generator class="native"></generator>
+        </id>
+        <property name="title"/>
+        <property name="content" length="1000"/>
+        <property name="publishDate" type="timestamp"/>
+        
+        <!-- publishUser属性本类与User的多对一关系 -->
+        <many-to-one name="publishUser" class="User" column="publishUserId"></many-to-one>
+	</class>
+</hibernate-mapping>

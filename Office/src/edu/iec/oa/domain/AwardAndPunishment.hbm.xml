@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="edu.iec.oa.domain">
+    <class name="AwardAndPunishment" table="t_awardAndPunishment">
+        <id name="id">
+            <generator class="native"></generator>
+        </id>
+        <property name="userId"/>
+        <property name="userName"/>
+        
+        <!-- 奖惩信息 -->
+        <property name="type"/>
+        <property name="time"/>
+        <property name="content"/>
+        <property name="reson"/>
+        
+        <!-- 附件信息 -->
+        <property name="proofFileName"/>
+        <property name="proofContentType"/>
+        <property name="proofSavePath"/>
+        
+        <!-- 操作日志信息 -->
+        <property name="operator"/>
+        <property name="operatTime"/>
+        <property name="ipAddress"/>
+        
+	</class>
+</hibernate-mapping>

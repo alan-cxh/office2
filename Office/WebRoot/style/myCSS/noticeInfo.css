@@ -1,0 +1,11 @@
+/* 详细信息 */
+*{margin:0; padding:0; border:0;}
+body{background-color:#F3F9FD; font-size: 12px;}
+table{line-height: 25px; color: #004A7D; border: 1px; background-color: #D2D2D2;}
+table td {background-color: #FFFFFF;}
+.txtLeft {text-align: right;}
+.txtRight {padding-left: 6px;}
+#box {width: 464px; margin: 25px auto;}
+#box01 {width: 560px; margin: 20px auto;}
+#content {width: 460; margin: 0 auto; padding: 10px;}
+.text {background-color: #FFFFFF; color: #004A7D; line-height: 20px;}

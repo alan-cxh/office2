@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="edu.iec.oa.domain">
+    <class name="Position" table="t_position">
+        <id name="id">
+            <generator class="native"></generator>
+        </id>
+        <property name="oldRole"/>
+        <property name="oldDepartment"/>
+        
+        <property name="newRole"/>
+        <property name="newDepartment"/>
+        <property name="reason"/>
+        <property name="changeTime"/>
+        
+        <property name="operator"/>
+        <property name="operatTime"/>
+        <property name="ipAddress"/>
+
+		<!-- user属性，本类（Position）与User的多对一关系 --> 
+		<many-to-one name="user" class="User" column="userId"></many-to-one>       
+        
+	</class>
+</hibernate-mapping>

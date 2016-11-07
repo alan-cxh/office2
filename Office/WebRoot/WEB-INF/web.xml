@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  
+  <display-name>Office</display-name>
+  
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>login.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <error-page>
+    <exception-type>java.lang.Exception</exception-type>
+    <location>/error.jsp</location>
+  </error-page>
+  
+  <!-- 登录session监听-->
+  <listener>
+    <listener-class>edu.iec.oa.util.SessionCounter</listener-class>
+  </listener>
+  
+   <!-- 配置Spring的用于初始化ApplicationContext对象的监听器 -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+  
+  <!-- 配置自己的用于做初始化工作的监听器，一定要配置到Spring的ContextLoaderListener的后面，因为要用到Spring的容器对象 -->
+  <listener>
+    <listener-class>edu.iec.oa.util.InitListener</listener-class>
+  </listener>
+  
+  <!-- 配置Spring的OpenSessionInViewFilter以解决懒加载异常的问题 -->
+  <filter>
+    <filter-name>openSessionInViewFilter</filter-name>
+    <filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+    <init-param>
+      <param-name>singleSession</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>openSessionInViewFilter</filter-name>
+    <url-pattern>*.action</url-pattern>
+  </filter-mapping>
+  
+  <!-- 配置Struts2的核心的过滤器 -->
+  <filter>
+    <filter-name>struts2</filter-name>
+    <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>struts2</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  <!--解决中文乱码问题-->
+    <filter>    
+        <filter-name>encodingFilter</filter-name>    
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>    
+        <init-param>    
+            <param-name>encoding</param-name>    
+            <param-value>UTF-8</param-value>    
+        </init-param>    
+    </filter>    
+    <filter-mapping>    
+        <filter-name>encodingFilter</filter-name>    
+        <url-pattern>/*</url-pattern>    
+    </filter-mapping>
+  
+  <!-- 验证码 -->
+	<servlet>
+		<servlet-name>codeServlet</servlet-name>
+		<servlet-class>edu.iec.oa.view.servlet.ValidatePictureServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>codeServlet</servlet-name>
+		<url-pattern>/code</url-pattern>
+	</servlet-mapping>
+	
+	<!-- PageOffice Begin -->
+	<servlet>
+	   <servlet-name>poserver</servlet-name> 
+	   <servlet-class>com.zhuozhengsoft.pageoffice.poserver.Server</servlet-class> 
+	</servlet>
+	 
+	<servlet-mapping> 
+	   <servlet-name>poserver</servlet-name> 
+	   <url-pattern>/poserver.do</url-pattern> 
+	</servlet-mapping> 
+	
+	<servlet-mapping>
+		<servlet-name>poserver</servlet-name>
+		<url-pattern>/poserver.zz</url-pattern>
+	</servlet-mapping> 
+	 
+	<servlet-mapping> 
+		<servlet-name>poserver</servlet-name> 
+		<url-pattern>/pageoffice.cab</url-pattern>
+	</servlet-mapping>
+	 
+	<servlet-mapping> 
+		<servlet-name>poserver</servlet-name> 
+		<url-pattern>/popdf.cab</url-pattern>
+	</servlet-mapping>
+	 
+	<servlet-mapping> 
+		<servlet-name>poserver</servlet-name> 
+		<url-pattern>/sealsetup.exe</url-pattern>
+	</servlet-mapping>
+	 
+	<servlet-mapping> 
+	    <servlet-name>poserver</servlet-name> 
+	    <url-pattern>/posetup.exe</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	   <servlet-name>adminseal</servlet-name> 
+	   <servlet-class>com.zhuozhengsoft.pageoffice.poserver.AdminSeal</servlet-class> 
+	</servlet>
+	 
+	<servlet-mapping> 
+	   <servlet-name>adminseal</servlet-name> 
+	   <url-pattern>/adminseal.do</url-pattern> 
+	</servlet-mapping>
+	 
+	<servlet-mapping> 
+	   <servlet-name>adminseal</servlet-name> 
+	   <url-pattern>/loginseal.do</url-pattern>
+	</servlet-mapping>
+	 
+	<servlet-mapping> 
+	   <servlet-name>adminseal</servlet-name> 
+	   <url-pattern>/sealimage.do</url-pattern>
+	</servlet-mapping>
+	 
+	<mime-mapping>  
+	 	<extension>mht</extension>  
+	 	<mime-type>message/rfc822</mime-type>  
+	</mime-mapping>
+	 
+	<context-param>
+	 	<param-name>adminseal-password</param-name>
+	 	<param-value>123456</param-value>
+	</context-param>
+	<!-- PageOffice End --> 
+	
+	
+</web-app>
